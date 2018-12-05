@@ -30,8 +30,8 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaService service;
 
-	@GetMapping(value = "/{id}")
 	// @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
 		Categoria obj = service.find(id);
 		return ResponseEntity.ok(obj);
@@ -48,17 +48,9 @@ public class CategoriaResource {
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
 		Categoria obj = service.fromDTO(objDto);
 		obj.setId(id);
-		obj = service.update(obj);
+		service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
-
-	/*
-	 * @RequestMapping(method = RequestMethod.POST) public ResponseEntity<Categoria>
-	 * insert(@RequestBody Categoria obj) { obj = service.insert(obj); URI uri =
-	 * ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-	 * .buildAndExpand(obj.getId()).toUri(); return
-	 * ResponseEntity.created(uri).build(); }
-	 */
 
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
@@ -74,8 +66,7 @@ public class CategoriaResource {
 	}
 
 	@GetMapping(value = "/page")
-	public ResponseEntity<Page<CategoriaDTO>> findPage(
-			@RequestParam(value = "page", defaultValue = "0") Integer page,
+	public ResponseEntity<Page<CategoriaDTO>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
 			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
