@@ -31,6 +31,10 @@ public class ItemPedido implements Serializable {
 		this.quantidade = quantidade;
 		this.preco = preco;
 	}
+	
+	public double getSubtotal() {
+		return (preco - desconto) * quantidade;
+	}
 
 	public Double getDesconto() {
 		return desconto;
