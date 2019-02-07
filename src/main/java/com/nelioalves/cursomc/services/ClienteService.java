@@ -2,6 +2,7 @@ package com.nelioalves.cursomc.services;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -104,7 +105,15 @@ public class ClienteService {
 	}
 
 	public URI uploadProfilePicture(MultipartFile multipartFile) {
-		return this.s3Service.uploadFile(multipartFile);
+		UserSS user = UserService.authenticated();
+		if (user == null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		URI uri = this.s3Service.uploadFile(multipartFile);
+		Optional<Cliente> cli = this.repo.findById(user.getId());
+		cli.get().setImageUrl(uri.toString());
+		this.repo.save(cli.get());
+		return uri;
 	}
 	
 }
